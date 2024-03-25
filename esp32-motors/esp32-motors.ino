@@ -1,3 +1,5 @@
+//TODO : check the error manipulation for backward, left and right
+
 // PIN DEFINITIONS
 // ===============================================================================================
 
@@ -61,6 +63,162 @@ void forward(){
 
   digitalWrite(directionPinLeft1, HIGH);
   digitalWrite(directionPinLeft2, LOW);
+  digitalWrite(directionPinRight1, HIGH);
+  digitalWrite(directionPinRight2, LOW);
+
+  int pulseLeft = 0;
+  int pulseRight = 0;
+  resetPulses();
+  delay(100);
+  pulseLeft = (pulseCountLeft1+pulseCountLeft2)/2;
+  pulseRight = (pulseCountRight1+pulseCountRight2)/2;
+  int currentError = pulseLeft - pulseRight;
+
+  while(currentError > error){
+    currentSpeedLeft -= 10;
+    currentSpeedRight -= 10;
+    analogWrite(speedControlPinLeft, currentSpeedLeft);
+    analogWrite(speedControlPinRight, currentSpeedRight);
+    int pulseLeft = 0;
+    int pulseRight = 0;
+    resetPulses();
+    delay(100);
+    pulseLeft = (pulseCountLeft1+pulseCountLeft2)/2;
+    pulseRight = (pulseCountRight1+pulseCountRight2)/2;
+    currentError = pulseLeft - pulseRight;
+  }
+
+  while(currentError < -error){
+    currentSpeedLeft -= 10;
+    currentSpeedRight -= 10;
+    analogWrite(speedControlPinLeft, currentSpeedLeft);
+    analogWrite(speedControlPinRight, currentSpeedRight);
+    int pulseLeft = 0;
+    int pulseRight = 0;
+    resetPulses();
+    delay(100);
+    pulseLeft = (pulseCountLeft1+pulseCountLeft2)/2;
+    pulseRight = (pulseCountRight1+pulseCountRight2)/2;
+    currentError = pulseLeft - pulseRight;
+  }
+}
+
+
+
+void backward(){
+
+  int currentSpeedLeft = 255;
+  int currentSpeedRight = 255;
+  
+  analogWrite(speedControlPinLeft, currentSpeedLeft);
+  analogWrite(speedControlPinRight, currentSpeedRight);
+
+  digitalWrite(directionPinLeft1, LOW);
+  digitalWrite(directionPinLeft2, HIGH);
+  digitalWrite(directionPinRight1, LOW);
+  digitalWrite(directionPinRight2, HIGH);
+
+  int pulseLeft = 0;
+  int pulseRight = 0;
+  resetPulses();
+  delay(100);
+  pulseLeft = (pulseCountLeft1+pulseCountLeft2)/2;
+  pulseRight = (pulseCountRight1+pulseCountRight2)/2;
+  int currentError = pulseLeft - pulseRight;
+
+  while(currentError > error){
+    currentSpeedLeft -= 10;
+    currentSpeedRight -= 10;
+    analogWrite(speedControlPinLeft, currentSpeedLeft);
+    analogWrite(speedControlPinRight, currentSpeedRight);
+    int pulseLeft = 0;
+    int pulseRight = 0;
+    resetPulses();
+    delay(100);
+    pulseLeft = (pulseCountLeft1+pulseCountLeft2)/2;
+    pulseRight = (pulseCountRight1+pulseCountRight2)/2;
+    currentError = pulseLeft - pulseRight;
+  }
+
+  while(currentError < -error){
+    currentSpeedLeft -= 10;
+    currentSpeedRight -= 10;
+    analogWrite(speedControlPinLeft, currentSpeedLeft);
+    analogWrite(speedControlPinRight, currentSpeedRight);
+    int pulseLeft = 0;
+    int pulseRight = 0;
+    resetPulses();
+    delay(100);
+    pulseLeft = (pulseCountLeft1+pulseCountLeft2)/2;
+    pulseRight = (pulseCountRight1+pulseCountRight2)/2;
+    currentError = pulseLeft - pulseRight;
+  }
+}
+
+
+
+void left(){
+
+  int currentSpeedLeft = 255;
+  int currentSpeedRight = 255;
+  
+  analogWrite(speedControlPinLeft, currentSpeedLeft);
+  analogWrite(speedControlPinRight, currentSpeedRight);
+
+  digitalWrite(directionPinLeft1, HIGH);
+  digitalWrite(directionPinLeft2, LOW);
+  digitalWrite(directionPinRight1, LOW);
+  digitalWrite(directionPinRight2, HIGH);
+
+  int pulseLeft = 0;
+  int pulseRight = 0;
+  resetPulses();
+  delay(100);
+  pulseLeft = (pulseCountLeft1+pulseCountLeft2)/2;
+  pulseRight = (pulseCountRight1+pulseCountRight2)/2;
+  int currentError = pulseLeft - pulseRight;
+
+  while(currentError > error){
+    currentSpeedLeft -= 10;
+    currentSpeedRight -= 10;
+    analogWrite(speedControlPinLeft, currentSpeedLeft);
+    analogWrite(speedControlPinRight, currentSpeedRight);
+    int pulseLeft = 0;
+    int pulseRight = 0;
+    resetPulses();
+    delay(100);
+    pulseLeft = (pulseCountLeft1+pulseCountLeft2)/2;
+    pulseRight = (pulseCountRight1+pulseCountRight2)/2;
+    currentError = pulseLeft - pulseRight;
+  }
+
+  while(currentError < -error){
+    currentSpeedLeft -= 10;
+    currentSpeedRight -= 10;
+    analogWrite(speedControlPinLeft, currentSpeedLeft);
+    analogWrite(speedControlPinRight, currentSpeedRight);
+    int pulseLeft = 0;
+    int pulseRight = 0;
+    resetPulses();
+    delay(100);
+    pulseLeft = (pulseCountLeft1+pulseCountLeft2)/2;
+    pulseRight = (pulseCountRight1+pulseCountRight2)/2;
+    currentError = pulseLeft - pulseRight;
+  }
+}
+
+
+
+void right(){
+
+  int currentSpeedLeft = 255;
+  int currentSpeedRight = 255;
+  
+  analogWrite(speedControlPinLeft, currentSpeedLeft);
+  analogWrite(speedControlPinRight, currentSpeedRight);
+
+  digitalWrite(directionPinLeft1, LOW);
+  digitalWrite(directionPinLeft2, HIGH);
   digitalWrite(directionPinRight1, HIGH);
   digitalWrite(directionPinRight2, LOW);
 
