@@ -5,17 +5,17 @@
 
 int error = 0;
 
-const int speedControlPinLeft;          // Speed and direction control pins for the motor driver
-const int speedControlPinRight;
-const int directionPinLeft1;
-const int directionPinLeft2;
-const int directionPinRight1;
-const int directionPinRight2;
+const int speedControlPinLeft = 27;          // Speed and direction control pins for the motor driver
+const int speedControlPinRight = 27;
+const int directionPinLeft1 = 25;
+const int directionPinLeft2 = 33;
+const int directionPinRight1 = 25;
+const int directionPinRight2 = 33;
 
-const int analogPinLeft1;               // Analog pulse outputs from the motor encoders
-const int analogPinLeft2;
-const int analogPinRight1;
-const int analogPinRight2;
+const int analogPinLeft1 = 13;               // Analog pulse outputs from the motor encoders
+const int analogPinLeft2 = 26;
+const int analogPinRight1 = 13;
+const int analogPinRight2 = 26;
 
 volatile int pulseCountLeft1 = 0;       // Pulse counter variables which get periodically updated
 volatile int pulseCountLeft2 = 0;       // using system interrupts
@@ -262,7 +262,7 @@ void right(){
 // ============================================
 void loop() {
   // put your main code here, to run repeatedly:
-  
+  forward();
 }
 
 
