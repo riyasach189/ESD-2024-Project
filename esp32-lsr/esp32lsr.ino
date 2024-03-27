@@ -29,19 +29,19 @@ void loop() {
   distanceCm3 = measureDistance(trigPin3, echoPin3);
 
   if (distanceCm1 > OBSTACLE_THRESHOLD_CM && distanceCm2 > OBSTACLE_THRESHOLD_CM && distanceCm3 > OBSTACLE_THRESHOLD_CM) {
-    moveStraight();
+    forward();
   } else if (distanceCm1 <= OBSTACLE_THRESHOLD_CM && distanceCm2 > OBSTACLE_THRESHOLD_CM) {
     // Obstacle on the left, move straight
-    moveStraight();
+    forward();
   } else if ((distanceCm1 > OBSTACLE_THRESHOLD_CM && distanceCm2 <= OBSTACLE_THRESHOLD_CM) || (distanceCm1 > OBSTACLE_THRESHOLD_CM && distanceCm3 <= OBSTACLE_THRESHOLD_CM)) {
     // Obstacle straight ahead or on the right, move left
-    moveLeft();
+    left();
   } else if (distanceCm1 <= OBSTACLE_THRESHOLD_CM && distanceCm2 <= OBSTACLE_THRESHOLD_CM) {
     // Obstacle on left and straight ahead, move right
-    moveRight();
+    right();
   } else {
     // Handle other situations or stop
-    stopMoving(); // You need to define this function
+    stop(); // You need to define this function
   }
 
   delay(1000); // Adjust based on how frequently you want to check for obstacles
