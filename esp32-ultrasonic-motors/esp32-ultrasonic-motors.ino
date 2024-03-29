@@ -14,8 +14,8 @@ long durationLeft, durationStraight, durationRight;
 float distanceCmLeft, distanceCmStraight, distanceCmRight;
 
 //motors
-const int speedControlPinLeft = 34;          
-const int speedControlPinRight = 35;
+const int speedControlPinLeft = 27;          
+const int speedControlPinRight = 14;
 const int directionPinLeft1 = 32;
 const int directionPinLeft2 = 33;
 const int directionPinRight1 = 25;
@@ -153,7 +153,7 @@ void loop()
   Serial.print(distanceCmRight);
   Serial.println();
 
-  if (distanceCmLeft < 5)
+  if (distanceCmLeft < 8)
   {
     LSR = 1;
   }
@@ -163,7 +163,7 @@ void loop()
     LSR = 0;
   }
 
-  if (distanceCmStraight < 5)
+  if (distanceCmStraight < 8)
   {
     LSR = (LSR * 10) + 1;
   }
@@ -173,7 +173,7 @@ void loop()
     LSR = (LSR * 10) + 0;
   }
 
-  if (distanceCmRight < 5)
+  if (distanceCmRight < 8)
   {
     LSR = (LSR * 10) + 1;
   }
