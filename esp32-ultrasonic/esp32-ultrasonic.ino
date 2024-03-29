@@ -1,9 +1,9 @@
-const int trigPin1 = 14;
-const int echoPin1 = 12;
-const int trigPin2 = 26;
-const int echoPin2 = 27;
-const int trigPin3 = 33;
-const int echoPin3 = 25;
+const int trigPin1 = 22;
+const int echoPin1 = 23;
+const int trigPin2 = 18;
+const int echoPin2 = 19;
+const int trigPin3 = 0;
+const int echoPin3 = 4;
 
 //define sound speed in cm/uS
 #define SOUND_SPEED 0.034

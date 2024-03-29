@@ -37,10 +37,10 @@ void setup() {
   pinMode(analogPinRight1, INPUT);
   pinMode(analogPinRight2, INPUT);
 
-  attachInterrupt(digitalPinToInterrupt(analogPinLeft1), pulseLeft1, RISING);     // Defining the system
-  attachInterrupt(digitalPinToInterrupt(analogPinLeft2), pulseLeft2, RISING);     // interrupts to periodically
-  attachInterrupt(digitalPinToInterrupt(analogPinRight1), pulseRight1, RISING);   // update the pulse counters
-  attachInterrupt(digitalPinToInterrupt(analogPinRight2), pulseRight2, RISING);
+  // attachInterrupt(digitalPinToInterrupt(analogPinLeft1), pulseLeft1, RISING);     // Defining the system
+  // attachInterrupt(digitalPinToInterrupt(analogPinLeft2), pulseLeft2, RISING);     // interrupts to periodically
+  // attachInterrupt(digitalPinToInterrupt(analogPinRight1), pulseRight1, RISING);   // update the pulse counters
+  // attachInterrupt(digitalPinToInterrupt(analogPinRight2), pulseRight2, RISING);
 }
 
 void resetPulses(){           // Function which will be called by the movement functions to reset the pulse counters
@@ -102,8 +102,6 @@ void forward(){
     currentError = pulseLeft - pulseRight;
   }
 }
-
-
 
 void backward(){
 
@@ -262,7 +260,11 @@ void right(){
 // ============================================
 void loop() {
   // put your main code here, to run repeatedly:
-  forward();
+  // Serial.println(analogRead(analogPinLeft1));
+  Serial.println(analogRead(analogPinLeft2));
+  // Serial.prin
+  Serial.println("teehee :3 :p");
+  delay(10);
 }
 
 
