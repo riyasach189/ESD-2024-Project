@@ -5,16 +5,16 @@
 
 int error = 0;
 
-const int speedControlPinLeft = 27;          // Speed and direction control pins for the motor driver
-const int speedControlPinRight = 27;
-const int directionPinLeft1 = 25;
-const int directionPinLeft2 = 33;
-const int directionPinRight1 = 25;
-const int directionPinRight2 = 33;
+const int speedControlPinLeft = 12;          // Speed and direction control pins for the motor driver
+const int speedControlPinRight = 12;
+const int directionPinLeft1 = 14;
+const int directionPinLeft2 = 27;
+const int directionPinRight1 = 14;
+const int directionPinRight2 = 27;
 
-const int analogPinLeft1 = 13;               // Analog pulse outputs from the motor encoders
+const int analogPinLeft1 = 25;               // Analog pulse outputs from the motor encoders
 const int analogPinLeft2 = 26;
-const int analogPinRight1 = 13;
+const int analogPinRight1 = 25;
 const int analogPinRight2 = 26;
 
 volatile int pulseCountLeft1 = 0;       // Pulse counter variables which get periodically updated
@@ -25,6 +25,7 @@ volatile int pulseCountRight2 = 0;
 // ================================================================================================
 
 void setup() {
+  Serial.begin(115200);
   pinMode(speedControlPinLeft, OUTPUT);
   pinMode(speedControlPinRight, OUTPUT);
   pinMode(directionPinLeft1, OUTPUT);
@@ -55,8 +56,8 @@ void resetPulses(){           // Function which will be called by the movement f
 
 void forward(){
 
-  int currentSpeedLeft = 255;
-  int currentSpeedRight = 255;
+  int currentSpeedLeft = 100;
+  int currentSpeedRight = 100;
   
   analogWrite(speedControlPinLeft, currentSpeedLeft);
   analogWrite(speedControlPinRight, currentSpeedRight);
@@ -261,10 +262,32 @@ void right(){
 void loop() {
   // put your main code here, to run repeatedly:
   // Serial.println(analogRead(analogPinLeft1));
-  Serial.println(analogRead(analogPinLeft2));
-  // Serial.prin
-  Serial.println("teehee :3 :p");
-  delay(10);
+  forward();
+
+  if (analogRead(analogPinLeft1) == 0)
+  {
+    Serial.print(0);
+  }
+
+  else 
+  {
+    Serial.print(1);
+  }
+
+  Serial.print(",");
+  
+  if (analogRead(analogPinLeft2) == 0)
+  {
+    Serial.print(0);
+  }
+
+  else 
+  {
+    Serial.print(1);
+  }
+
+  Serial.println("");
+  delay(1);
 }
 
 
