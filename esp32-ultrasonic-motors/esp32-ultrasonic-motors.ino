@@ -1,6 +1,6 @@
 //ultrasonic
-const int trigPinLeft = 22;
-const int echoPinLeft = 23;
+const int trigPinLeft = 22;//trig is input
+const int echoPinLeft = 23;//echo is output
 const int trigPinStraight = 18;
 const int echoPinStraight = 19;
 const int trigPinRight = 0;
