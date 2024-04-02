@@ -38,10 +38,10 @@ void setup() {
   pinMode(analogPinRight1, INPUT);
   pinMode(analogPinRight2, INPUT);
 
-  // attachInterrupt(digitalPinToInterrupt(analogPinLeft1), pulseLeft1, RISING);     // Defining the system
-  // attachInterrupt(digitalPinToInterrupt(analogPinLeft2), pulseLeft2, RISING);     // interrupts to periodically
-  // attachInterrupt(digitalPinToInterrupt(analogPinRight1), pulseRight1, RISING);   // update the pulse counters
-  // attachInterrupt(digitalPinToInterrupt(analogPinRight2), pulseRight2, RISING);
+  attachInterrupt(digitalPinToInterrupt(analogPinLeft1), pulseLeft1, RISING);     // Defining the system
+  attachInterrupt(digitalPinToInterrupt(analogPinLeft2), pulseLeft2, RISING);     // interrupts to periodically
+  attachInterrupt(digitalPinToInterrupt(analogPinRight1), pulseRight1, RISING);   // update the pulse counters
+  attachInterrupt(digitalPinToInterrupt(analogPinRight2), pulseRight2, RISING);
 }
 
 void resetPulses(){           // Function which will be called by the movement functions to reset the pulse counters
@@ -56,8 +56,8 @@ void resetPulses(){           // Function which will be called by the movement f
 
 void forward(){
 
-  int currentSpeedLeft = 100;
-  int currentSpeedRight = 100;
+  int currentSpeedLeft = 255;
+  int currentSpeedRight = 255;
   
   analogWrite(speedControlPinLeft, currentSpeedLeft);
   analogWrite(speedControlPinRight, currentSpeedRight);
