@@ -48,20 +48,12 @@ UART_HandleTypeDef huart2;
 //define sound speed in cm/uS
 int lsr = 0;
 
-uint32_t pMillisLeft;
-uint32_t Value1Left = 0;
-uint32_t Value2Left = 0;
-uint32_t DistanceLeft  = 0;
-
-uint32_t pMillisStraight;
-uint32_t Value1Straight = 0;
-uint32_t Value2Straight = 0;
-uint32_t DistanceStraight  = 0;
-
-uint32_t pMillisRight;
-uint32_t Value1Right = 0;
-uint32_t Value2Right = 0;
-uint32_t DistanceRight  = 0;
+uint32_t pMillis;
+uint32_t Value1 = 0;
+uint32_t Value2 = 0;
+uint16_t DistanceLeft  = 0;  // cm
+uint16_t DistanceStraight  = 0;  // cm
+uint16_t DistanceRight  = 0;  // cm
 
 /* USER CODE END PV */
 
@@ -76,7 +68,11 @@ static void MX_TIM1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int _write (int file, char *ptr, int len)
+{
+	HAL_UART_Transmit(&huart2, (uint8_t *)ptr, len, HAL_MAX_DELAY);
+	return len;
+}
 /* USER CODE END 0 */
 
 /**
@@ -150,6 +146,10 @@ int main(void)
   	HAL_GPIO_WritePin(motorRight2_GPIO_Port, motorRight2_Pin, GPIO_PIN_RESET);
   }
 
+  HAL_TIM_Base_Start(&htim1);
+  HAL_GPIO_WritePin(trigLeft_GPIO_Port, trigLeft_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
+  HAL_GPIO_WritePin(trigStraight_GPIO_Port, trigStraight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
+  HAL_GPIO_WritePin(trigRight_GPIO_Port, trigRight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
 
   /* USER CODE END 2 */
 
@@ -166,52 +166,47 @@ int main(void)
 	 __HAL_TIM_SET_COUNTER(&htim1, 0);
 	 while (__HAL_TIM_GET_COUNTER (&htim1) < 10);  // wait for 10 us
 	 HAL_GPIO_WritePin(trigLeft_GPIO_Port, trigLeft_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
-
-	 pMillisLeft = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
 	 // wait for the echo pin to go high
-	 while (!(HAL_GPIO_ReadPin (echoLeft_GPIO_Port, echoLeft_Pin)) && pMillisLeft + 10 >  HAL_GetTick());
-	 Value1Left = __HAL_TIM_GET_COUNTER (&htim1);
+	 while (!(HAL_GPIO_ReadPin (echoLeft_GPIO_Port, echoLeft_Pin)) && pMillis + 10 >  HAL_GetTick());
+	 Value1 = __HAL_TIM_GET_COUNTER (&htim1);
 
-	 pMillisLeft = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
 	 // wait for the echo pin to go low
-	 while ((HAL_GPIO_ReadPin (echoLeft_GPIO_Port, echoLeft_Pin)) && pMillisLeft + 50 > HAL_GetTick());
-	 Value2Left = __HAL_TIM_GET_COUNTER (&htim1);
+	 while ((HAL_GPIO_ReadPin (echoLeft_GPIO_Port, echoLeft_Pin)) && pMillis + 50 > HAL_GetTick());
+	 Value2 = __HAL_TIM_GET_COUNTER (&htim1);
 
-	 DistanceLeft = ((Value2Left - Value1Left) * 34) / 2;//distance in millimeters
+	 DistanceLeft = (Value2-Value1)* 0.034/2;
 
 	 HAL_GPIO_WritePin(trigStraight_GPIO_Port, trigStraight_Pin, GPIO_PIN_SET);  // pull the TRIG pin HIGH
 	 __HAL_TIM_SET_COUNTER(&htim1, 0);
 	 while (__HAL_TIM_GET_COUNTER (&htim1) < 10);  // wait for 10 us
 	 HAL_GPIO_WritePin(trigStraight_GPIO_Port, trigStraight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
-
-	 pMillisStraight = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
 	 // wait for the echo pin to go high
-	 while (!(HAL_GPIO_ReadPin (echoStraight_GPIO_Port, echoStraight_Pin)) && pMillisStraight + 10 >  HAL_GetTick());
-	 Value1Straight = __HAL_TIM_GET_COUNTER (&htim1);
-
-	 pMillisStraight = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
+	 while (!(HAL_GPIO_ReadPin (echoStraight_GPIO_Port, echoStraight_Pin)) && pMillis + 10 >  HAL_GetTick());
+	 Value1 = __HAL_TIM_GET_COUNTER (&htim1);
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
 	 // wait for the echo pin to go low
-	 while ((HAL_GPIO_ReadPin (echoStraight_GPIO_Port, echoStraight_Pin)) && pMillisStraight + 50 > HAL_GetTick());
-	 Value2Straight = __HAL_TIM_GET_COUNTER (&htim1);
-
-	 DistanceStraight = ((Value2Straight - Value1Straight) * 34) / 2;//distance in millimeters
+	 while ((HAL_GPIO_ReadPin (echoStraight_GPIO_Port, echoStraight_Pin)) && pMillis + 50 > HAL_GetTick());
+	 Value2 = __HAL_TIM_GET_COUNTER (&htim1);
+	 DistanceStraight = (Value2-Value1)* 0.034/2;
 
 	 HAL_GPIO_WritePin(trigRight_GPIO_Port, trigRight_Pin, GPIO_PIN_SET);  // pull the TRIG pin HIGH
 	 __HAL_TIM_SET_COUNTER(&htim1, 0);
 	 while (__HAL_TIM_GET_COUNTER (&htim1) < 10);  // wait for 10 us
 	 HAL_GPIO_WritePin(trigRight_GPIO_Port, trigRight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
-
-	 pMillisRight = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
 	 // wait for the echo pin to go high
-	 while (!(HAL_GPIO_ReadPin (echoRight_GPIO_Port, echoRight_Pin)) && pMillisRight + 10 >  HAL_GetTick());
-	 Value1Right = __HAL_TIM_GET_COUNTER (&htim1);
-
-	 pMillisRight = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
+	 while (!(HAL_GPIO_ReadPin (echoRight_GPIO_Port, echoRight_Pin)) && pMillis + 10 >  HAL_GetTick());
+	 Value1 = __HAL_TIM_GET_COUNTER (&htim1);
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
 	 // wait for the echo pin to go low
-	 while ((HAL_GPIO_ReadPin (echoRight_GPIO_Port, echoRight_Pin)) && pMillisRight + 50 > HAL_GetTick());
-	 Value2Right = __HAL_TIM_GET_COUNTER (&htim1);
+	 while ((HAL_GPIO_ReadPin (echoRight_GPIO_Port, echoRight_Pin)) && pMillis + 50 > HAL_GetTick());
+	 Value2 = __HAL_TIM_GET_COUNTER (&htim1);
+	 DistanceRight = (Value2-Value1)* 0.034/2;
 
-	 DistanceRight = ((Value2Right - Value1Right) * 34) / 2;//distance in millimeters
+	 printf("%d, %d, %d\n", DistanceLeft, DistanceStraight, DistanceRight);
 
 	 if (DistanceLeft < 8) {lsr = 1;}
 	 else {lsr = 0;}
@@ -254,7 +249,7 @@ int main(void)
 			 break;
 	 }
 
-	 HAL_Delay(50);
+	 HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
