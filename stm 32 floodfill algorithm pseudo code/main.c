@@ -1,48 +1,66 @@
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
-#define MAZE_SIZE 10 // Assuming a 10x10 maze for simplicity
-#define WALL -1
-#define UNVISITED 0xFFFF
-#define GOAL 0
+// Assume these are defined according to your maze dimensions.
+#define MAX_WIDTH 100
+#define MAX_HEIGHT 100
 
-uint16_t maze[MAZE_SIZE][MAZE_SIZE];
+int maze[MAX_WIDTH][MAX_HEIGHT];
+bool visited[MAX_WIDTH][MAX_HEIGHT] = {false};
 
-// Function prototypes
-void initializeMaze();
-void floodFill(uint8_t x, uint8_t y, uint16_t value);
-bool isValid(uint8_t x, uint8_t y);
+// Directions: right, left, down, up
+int dx[] = {1, -1, 0, 0};
+int dy[] = {0, 0, 1, -1};
 
-void main() {
-    initializeMaze();
-    // Assuming the finish is at (9,9) for this example
-    floodFill(9, 9, GOAL);
-    // After calling floodFill, the maze array contains the steps from each cell to the finish.
+typedef struct {
+    uint8_t x, y;
+} Point;
+
+// Queue for BFS
+Point queue[MAX_WIDTH * MAX_HEIGHT];
+int front = 0, rear = 0;
+
+void enqueue(Point p) {
+    queue[rear++] = p;
 }
 
-void initializeMaze() {
-    for (uint8_t x = 0; x < MAZE_SIZE; x++) {
-        for (uint8_t y = 0; y < MAZE_SIZE; y++) {
-            maze[x][y] = UNVISITED; // Initialize all cells as unvisited
+Point dequeue() {
+    return queue[front++];
+}
+
+bool isEmpty() {
+    return front == rear;
+}
+
+bool isValid(int x, int y) {
+    return x >= 0 && x < MAX_WIDTH && y >= 0 && y < MAX_HEIGHT && maze[x][y] == 0 && !visited[x][y];
+}
+
+void solveMaze(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY) {
+    enqueue((Point){startX, startY});
+    visited[startX][startY] = true;
+    maze[startX][startY] = 1; // Starting point distance is 1 to differentiate from unvisited cells.
+
+    while (!isEmpty()) {
+        Point p = dequeue();
+        // If the end point is reached
+        if (p.x == endX && p.y == endY) {
+            printf("Maze solved! Distance to end: %d\n", maze[p.x][p.y] - 1);
+            return; // Optionally, continue to mark all reachable areas.
+        }
+
+        for (int i = 0; i < 4; i++) { // Explore all directions
+            int newX = p.x + dx[i];
+            int newY = p.y + dy[i];
+
+            if (isValid(newX, newY)) {
+                visited[newX][newY] = true;
+                maze[newX][newY] = maze[p.x][p.y] + 1; // Increment distance
+                enqueue((Point){newX, newY});
+            }
         }
     }
-    // Manually set walls based on your maze's layout
-    // Example: maze[1][1] = WALL;
-}
 
-void floodFill(uint8_t x, uint8_t y, uint16_t value) {
-    if (!isValid(x, y) || maze[x][y] <= value) {
-        return; // Stop if out of bounds, is a wall, or already has a lower value
-    }
-    maze[x][y] = value;
-    // Recursively fill neighbors, incrementing the value
-    floodFill(x + 1, y, value + 1);
-    floodFill(x - 1, y, value + 1);
-    floodFill(x, y + 1, value + 1);
-    floodFill(x, y - 1, value + 1);
-}
-
-bool isValid(uint8_t x, uint8_t y) {
-    // Check if the coordinates are within the maze bounds and not a wall
-    return x < MAZE_SIZE && y < MAZE_SIZE && maze[x][y] != WALL;
+    printf("Maze could not be solved.\n");
 }
