@@ -61,6 +61,12 @@ void Error_Handler(void);
 #define MCO_GPIO_Port GPIOF
 #define LED_GREEN_Pin GPIO_PIN_5
 #define LED_GREEN_GPIO_Port GPIOA
+#define Motor_Encoder_A_Pin GPIO_PIN_6
+#define Motor_Encoder_A_GPIO_Port GPIOA
+#define Motor_Encoder_A_EXTI_IRQn EXTI4_15_IRQn
+#define Motor_Encoder_B_Pin GPIO_PIN_7
+#define Motor_Encoder_B_GPIO_Port GPIOA
+#define Motor_Encoder_B_EXTI_IRQn EXTI4_15_IRQn
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
