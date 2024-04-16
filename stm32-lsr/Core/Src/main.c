@@ -56,10 +56,10 @@ uint16_t DistanceLeft  = 0;  // cm
 uint16_t DistanceStraight  = 0;  // cm
 uint16_t DistanceRight  = 0;  // cm
 
-int count = 0;
-
-uint32_t counter_1 = 0;
-uint16_t count_1 = 0;
+//int count = 0;
+//
+//uint32_t counter_1 = 0;
+//uint16_t count_1 = 0;
 
 /* USER CODE END PV */
 
@@ -158,10 +158,8 @@ int main(void)
   HAL_GPIO_WritePin(trigStraight_GPIO_Port, trigStraight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
   HAL_GPIO_WritePin(trigRight_GPIO_Port, trigRight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
 
-  HAL_TIM_Encoder_Start_IT(&htim3, TIM_CHANNEL_ALL); //timer 1 channel 1&2 encoder mode for motor A
-  TIM3->CNT = 0;
-
-
+//  HAL_TIM_Encoder_Start_IT(&htim3, TIM_CHANNEL_ALL); //timer 1 channel 1&2 encoder mode for motor A
+//  TIM3->CNT = 0;
 
 // counter_1 = __HAL_TIM_GET_COUNTER(&htim3);
 //
@@ -175,106 +173,106 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  counter_1 = __HAL_TIM_GET_COUNTER(&htim3);
+//	  counter_1 = __HAL_TIM_GET_COUNTER(&htim3);
+//
+//	  count_1 = (int16_t)counter_1; // encoder 1 pulse counter
+//
+//	  printf("%d\r\n", count_1);
 
-	  count_1 = (int16_t)counter_1; // encoder 1 pulse counter
 
-	  printf("%d\r\n", count_1);
+	 forward();
+	 lsr = 0;
 
+	 // ultrasonic
 
-//	 forward();
-//	 lsr = 0;
-//
-//	 // ultrasonic
-//
-//	 HAL_GPIO_WritePin(trigLeft_GPIO_Port, trigLeft_Pin, GPIO_PIN_SET);  // pull the TRIG pin HIGH
-//	 __HAL_TIM_SET_COUNTER(&htim1, 0);
-//	 while (__HAL_TIM_GET_COUNTER (&htim1) < 10);  // wait for 10 us
-//	 HAL_GPIO_WritePin(trigLeft_GPIO_Port, trigLeft_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
-//	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
-//	 // wait for the echo pin to go high
-//	 while (!(HAL_GPIO_ReadPin (echoLeft_GPIO_Port, echoLeft_Pin)) && pMillis + 10 >  HAL_GetTick());
-//	 Value1 = __HAL_TIM_GET_COUNTER (&htim1);
-//
-//	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
-//	 // wait for the echo pin to go low
-//	 while ((HAL_GPIO_ReadPin (echoLeft_GPIO_Port, echoLeft_Pin)) && pMillis + 50 > HAL_GetTick());
-//	 Value2 = __HAL_TIM_GET_COUNTER (&htim1);
-//
-//	 DistanceLeft = (Value2-Value1)* 0.034/2;
-//
-//	 HAL_GPIO_WritePin(trigStraight_GPIO_Port, trigStraight_Pin, GPIO_PIN_SET);  // pull the TRIG pin HIGH
-//	 __HAL_TIM_SET_COUNTER(&htim1, 0);
-//	 while (__HAL_TIM_GET_COUNTER (&htim1) < 10);  // wait for 10 us
-//	 HAL_GPIO_WritePin(trigStraight_GPIO_Port, trigStraight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
-//	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
-//	 // wait for the echo pin to go high
-//	 while (!(HAL_GPIO_ReadPin (echoStraight_GPIO_Port, echoStraight_Pin)) && pMillis + 10 >  HAL_GetTick());
-//	 Value1 = __HAL_TIM_GET_COUNTER (&htim1);
-//	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
-//	 // wait for the echo pin to go low
-//	 while ((HAL_GPIO_ReadPin (echoStraight_GPIO_Port, echoStraight_Pin)) && pMillis + 50 > HAL_GetTick());
-//	 Value2 = __HAL_TIM_GET_COUNTER (&htim1);
-//	 DistanceStraight = (Value2-Value1)* 0.034/2;
-//
-//	 HAL_GPIO_WritePin(trigRight_GPIO_Port, trigRight_Pin, GPIO_PIN_SET);  // pull the TRIG pin HIGH
-//	 __HAL_TIM_SET_COUNTER(&htim1, 0);
-//	 while (__HAL_TIM_GET_COUNTER (&htim1) < 10);  // wait for 10 us
-//	 HAL_GPIO_WritePin(trigRight_GPIO_Port, trigRight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
-//	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
-//	 // wait for the echo pin to go high
-//	 while (!(HAL_GPIO_ReadPin (echoRight_GPIO_Port, echoRight_Pin)) && pMillis + 10 >  HAL_GetTick());
-//	 Value1 = __HAL_TIM_GET_COUNTER (&htim1);
-//	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
-//	 // wait for the echo pin to go low
-//	 while ((HAL_GPIO_ReadPin (echoRight_GPIO_Port, echoRight_Pin)) && pMillis + 50 > HAL_GetTick());
-//	 Value2 = __HAL_TIM_GET_COUNTER (&htim1);
-//	 DistanceRight = (Value2-Value1)* 0.034/2;
-//
-////	 printf("%d, %d, %d\n", DistanceLeft, DistanceStraight, DistanceRight);
-//
-//	 if (DistanceLeft < 8) {lsr = 1;}
-//	 else {lsr = 0;}
-//
-//	 if (DistanceStraight < 8) {lsr = (lsr << 1) | 1;}
-//	 else {lsr = lsr << 1;}
-//
-//	 if (DistanceRight < 8) {lsr = (lsr << 1) | 1;}
-//	 else {lsr = lsr << 1;}
-//
-//	 // LSR logic
-//	 switch (lsr)
-//	 {
-//		 case 0b000:
-//			 stop();
-//			 break;
-//		 case 0b001:
-//			 left();
-//			 break;
-//		 case 0b010:
-//			 left();
-//			 break;
-//		 case 0b011:
-//			 left();
-//			 break;
-//		 case 0b100:
-//			 forward();
-//			 break;
-//		 case 0b101:
-//			 forward();
-//			 break;
-//		 case 0b110:
-//			 right();
-//			 break;
-//		 case 0b111:
-//			 turnAround();
-//			 break;
-//		 default:
-//			 forward();
-//			 break;
-//	 }
+	 HAL_GPIO_WritePin(trigLeft_GPIO_Port, trigLeft_Pin, GPIO_PIN_SET);  // pull the TRIG pin HIGH
+	 __HAL_TIM_SET_COUNTER(&htim1, 0);
+	 while (__HAL_TIM_GET_COUNTER (&htim1) < 10);  // wait for 10 us
+	 HAL_GPIO_WritePin(trigLeft_GPIO_Port, trigLeft_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
+	 // wait for the echo pin to go high
+	 while (!(HAL_GPIO_ReadPin (echoLeft_GPIO_Port, echoLeft_Pin)) && pMillis + 10 >  HAL_GetTick());
+	 Value1 = __HAL_TIM_GET_COUNTER (&htim1);
 
-//	 HAL_Delay(500);
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
+	 // wait for the echo pin to go low
+	 while ((HAL_GPIO_ReadPin (echoLeft_GPIO_Port, echoLeft_Pin)) && pMillis + 50 > HAL_GetTick());
+	 Value2 = __HAL_TIM_GET_COUNTER (&htim1);
+
+	 DistanceLeft = (Value2-Value1)* 0.034/2;
+
+	 HAL_GPIO_WritePin(trigStraight_GPIO_Port, trigStraight_Pin, GPIO_PIN_SET);  // pull the TRIG pin HIGH
+	 __HAL_TIM_SET_COUNTER(&htim1, 0);
+	 while (__HAL_TIM_GET_COUNTER (&htim1) < 10);  // wait for 10 us
+	 HAL_GPIO_WritePin(trigStraight_GPIO_Port, trigStraight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
+	 // wait for the echo pin to go high
+	 while (!(HAL_GPIO_ReadPin (echoStraight_GPIO_Port, echoStraight_Pin)) && pMillis + 10 >  HAL_GetTick());
+	 Value1 = __HAL_TIM_GET_COUNTER (&htim1);
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
+	 // wait for the echo pin to go low
+	 while ((HAL_GPIO_ReadPin (echoStraight_GPIO_Port, echoStraight_Pin)) && pMillis + 50 > HAL_GetTick());
+	 Value2 = __HAL_TIM_GET_COUNTER (&htim1);
+	 DistanceStraight = (Value2-Value1)* 0.034/2;
+
+	 HAL_GPIO_WritePin(trigRight_GPIO_Port, trigRight_Pin, GPIO_PIN_SET);  // pull the TRIG pin HIGH
+	 __HAL_TIM_SET_COUNTER(&htim1, 0);
+	 while (__HAL_TIM_GET_COUNTER (&htim1) < 10);  // wait for 10 us
+	 HAL_GPIO_WritePin(trigRight_GPIO_Port, trigRight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop  (for timeout)
+	 // wait for the echo pin to go high
+	 while (!(HAL_GPIO_ReadPin (echoRight_GPIO_Port, echoRight_Pin)) && pMillis + 10 >  HAL_GetTick());
+	 Value1 = __HAL_TIM_GET_COUNTER (&htim1);
+	 pMillis = HAL_GetTick(); // used this to avoid infinite while loop (for timeout)
+	 // wait for the echo pin to go low
+	 while ((HAL_GPIO_ReadPin (echoRight_GPIO_Port, echoRight_Pin)) && pMillis + 50 > HAL_GetTick());
+	 Value2 = __HAL_TIM_GET_COUNTER (&htim1);
+	 DistanceRight = (Value2-Value1)* 0.034/2;
+
+	 printf("%d, %d, %d\n", DistanceLeft, DistanceStraight, DistanceRight);
+
+	 if (DistanceLeft < 8) {lsr = 1;}
+	 else {lsr = 0;}
+
+	 if (DistanceStraight < 8) {lsr = (lsr << 1) | 1;}
+	 else {lsr = lsr << 1;}
+
+	 if (DistanceRight < 8) {lsr = (lsr << 1) | 1;}
+	 else {lsr = lsr << 1;}
+
+	 // LSR logic
+	 switch (lsr)
+	 {
+		 case 0b000:
+			 stop();
+			 break;
+		 case 0b001:
+			 left();
+			 break;
+		 case 0b010:
+			 left();
+			 break;
+		 case 0b011:
+			 left();
+			 break;
+		 case 0b100:
+			 forward();
+			 break;
+		 case 0b101:
+			 forward();
+			 break;
+		 case 0b110:
+			 right();
+			 break;
+		 case 0b111:
+			 turnAround();
+			 break;
+		 default:
+			 forward();
+			 break;
+	 }
+
+	 HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -540,72 +538,31 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
-
-{
-
-//  if(!FACTORY_TEST){
-
-  static uint8_t counter = 0;
-
-  if(GPIO_Pin == Motor_Encoder_A_Pin)
-
-  {
-
-      if(counter == 0)
-
-      {
-
-         //snprintf(rx_buffer, MAX_UART_MSG, "name:calibrate_motors\n");
-
-//         snprintf(rx_buffer, MAX_UART_MSG, "name:go_forward,distance:100, use_ramp:1\n");
-
-         counter++;
-
-      }
-
-      else if(counter == 1)
-
-      {
-
-//         snprintf(rx_buffer, MAX_UART_MSG, "name:angle_control,angle:90\n");
-
-         counter = 0;
-
-      }
-
-//      flagUart = 1;
-
-  }
-              // new value from right encoder, need to update distance covered
-
-  else if (GPIO_Pin == Motor_Encoder_B_Pin)
-
-//    update_distance_dx();              // new value from left encoder, need to update distance covered
-  {
-	  if(HAL_GPIO_ReadPin(Motor_Encoder_A_GPIO_Port, Motor_Encoder_A_Pin))
-
-//	  updated_distance = get_distance(DX) + DISTANCE_PER_TICK;
-		  count++;
-	  printf("%d\r\n", count);
-
-  }
-
-
-  // new code
-
-//  if((GPIO_Pin == A_SX_Pin) || (GPIO_Pin == A_DX_Pin))
+//void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+//{
+//  static uint8_t counter = 0;
 //
-//    update_mvt(GPIO_Pin);
+//  if(GPIO_Pin == Motor_Encoder_A_Pin)
+//  {
+//      if(counter == 0)
+//      {
+//    	  counter++;
+//      }
 //
-//       }
+//      else if(counter == 1)
+//      {
+//         counter = 0;
+//      }
+//  }
 //
-//       else{
-
-
-  // new code end
-
-}
+//  else if (GPIO_Pin == Motor_Encoder_B_Pin)
+//  {
+//	  if(HAL_GPIO_ReadPin(Motor_Encoder_A_GPIO_Port, Motor_Encoder_A_Pin))
+//		  count++;
+//
+//	  printf("%d\r\n", count);
+//  }
+//}
 /* USER CODE END 4 */
 
 /**
@@ -621,6 +578,7 @@ void Error_Handler(void)
   {
   }
 }
+
   /* USER CODE END Error_Handler_Debug */
 
 
