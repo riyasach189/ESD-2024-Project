@@ -56,6 +56,8 @@ uint16_t DistanceLeft  = 0;  // cm
 uint16_t DistanceStraight  = 0;  // cm
 uint16_t DistanceRight  = 0;  // cm
 
+int stopFlag = 0;
+
 //int count = 0;
 //
 //uint32_t counter_1 = 0;
@@ -245,6 +247,7 @@ int main(void)
 	 {
 		 case 0b000:
 			 stop();
+			 stopFlag = 1;
 			 break;
 		 case 0b001:
 			 left();
@@ -270,6 +273,11 @@ int main(void)
 		 default:
 			 forward();
 			 break;
+	 }
+
+	 if (stopFlag == 1)
+	 {
+		 break;
 	 }
 
 	 HAL_Delay(500);
