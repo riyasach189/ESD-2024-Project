@@ -275,10 +275,10 @@ int main(void)
 			 break;
 	 }
 
-	 if (stopFlag == 1)
-	 {
-		 break;
-	 }
+//	 if (stopFlag == 1)
+//	 {
+//		 break;
+//	 }
 
 	 HAL_Delay(500);
     /* USER CODE END WHILE */
