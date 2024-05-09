@@ -60,8 +60,8 @@ all: main-build
 main-build: stm32-input-capture.elf secondary-outputs
 
 # Tool invocations
-stm32-input-capture.elf stm32-input-capture.map: $(OBJS) $(USER_OBJS) C:\Users\Riya_Sachdeva\STM32CubeIDE\workspace_1.14.1\stm32-input-capture\STM32G070RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "stm32-input-capture.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Riya_Sachdeva\STM32CubeIDE\workspace_1.14.1\stm32-input-capture\STM32G070RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32-input-capture.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+stm32-input-capture.elf stm32-input-capture.map: $(OBJS) $(USER_OBJS) C:\Users\Riya_Sachdeva\Desktop\ESD-2024-Project\stm32-input-capture\STM32G070RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "stm32-input-capture.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Riya_Sachdeva\Desktop\ESD-2024-Project\stm32-input-capture\STM32G070RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32-input-capture.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
