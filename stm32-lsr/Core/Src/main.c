@@ -32,6 +32,9 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define WALL_DISTANCE 8 //cm
+
+#define PULSES_STRAIGHT 500
+#define PULSES_TURN 100
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -103,7 +106,7 @@ void stop(void)
 
 void forward(void)
 {
-	while (count1 < 500)
+	while (count1 < PULSES_STRAIGHT)
 	{
 	  HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_RESET);
@@ -117,7 +120,7 @@ void forward(void)
 //to be corrected
 void left(void)
 {
-	while ((count1 < 500) && (count2 < 500))
+	while ((count1 < PULSES_TURN) && (count2 < PULSES_TURN))
 	{
 		HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_RESET);
@@ -131,7 +134,7 @@ void left(void)
 //to be corrected
 void right(void)
 {
-	while ((count1 < 500) && (count2 < 500))
+	while ((count1 < PULSES_TURN) && (count2 < PULSES_TURN))
 	{
 		HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_SET);
@@ -482,7 +485,7 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.WordLength = UART_WORDLENGTH_9B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
   huart2.Init.Mode = UART_MODE_TX_RX;
@@ -550,7 +553,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : Motor_Encoder_A_Pin Motor_Encoder_B_Pin */
   GPIO_InitStruct.Pin = Motor_Encoder_A_Pin|Motor_Encoder_B_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : motorRight2_Pin motorRight1_Pin motorLeft2_Pin motorLeft1_Pin */
@@ -601,7 +604,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 	  printf("Count2: %d\r\n", count2);
 	}
 
-  if (count1 >= 500)
+  if (count1 >= PULSES_STRAIGHT)
   {
 	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
 	  count1 = 0;
@@ -615,7 +618,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
   }
 
-  if (count2 >= 500)
+  if (count2 >= PULSES_STRAIGHT)
     {
 	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
 	  count2 = 0;
@@ -671,7 +674,6 @@ void Error_Handler(void)
 }
 
   /* USER CODE END Error_Handler_Debug */
-
 
 #ifdef  USE_FULL_ASSERT
 /**

@@ -43,9 +43,8 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-int count = 0;
-uint32_t counter_1 = 0;
-uint16_t count_1 = 0;
+int count1 = 0;
+int count2 = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -63,6 +62,65 @@ int _write (int file, char *ptr, int len)
 	HAL_UART_Transmit(&huart2, (uint8_t *)ptr, len, HAL_MAX_DELAY);
 	return len;
 }
+
+void stop(void)
+{
+	HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(motorRight1_GPIO_Port, motorRight1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(motorRight2_GPIO_Port, motorRight2_Pin, GPIO_PIN_RESET);
+
+	count1 = 0;
+	count2 = 0;
+}
+
+void forward(void)
+{
+	while (count1 < 500)
+	{
+	  HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_SET);
+	  HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(motorRight1_GPIO_Port, motorRight1_Pin, GPIO_PIN_SET);
+	  HAL_GPIO_WritePin(motorRight2_GPIO_Port, motorRight2_Pin, GPIO_PIN_RESET);
+	}
+
+	stop();
+}
+
+//to be corrected
+void left(void)
+{
+	while ((count1 < 500) && (count2 < 500))
+	{
+		HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(motorRight1_GPIO_Port, motorRight1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(motorRight2_GPIO_Port, motorRight2_Pin, GPIO_PIN_SET);
+	}
+
+	stop();
+}
+
+//to be corrected
+void right(void)
+{
+	while ((count1 < 500) && (count2 < 500))
+	{
+		HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(motorRight1_GPIO_Port, motorRight1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(motorRight2_GPIO_Port, motorRight2_Pin, GPIO_PIN_RESET);
+	}
+
+	stop();
+}
+
+void turnAround(void)
+{
+	right();
+	right();
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -95,6 +153,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
   HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
 
   /* USER CODE END 2 */
@@ -168,7 +227,7 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.WordLength = UART_WORDLENGTH_7B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
   huart2.Init.Mode = UART_MODE_TX_RX;
@@ -214,9 +273,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, motorRight2_Pin|motorRight1_Pin|motorLeft2_Pin|motorLeft1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : LED_GREEN_Pin */
   GPIO_InitStruct.Pin = LED_GREEN_Pin;
@@ -225,11 +288,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(LED_GREEN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : motor1_input_Pin */
-  GPIO_InitStruct.Pin = motor1_input_Pin;
+  /*Configure GPIO pins : motor1_input_Pin motor2_input_Pin */
+  GPIO_InitStruct.Pin = motor1_input_Pin|motor2_input_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : motorRight2_Pin motorRight1_Pin motorLeft2_Pin motorLeft1_Pin */
+  GPIO_InitStruct.Pin = motorRight2_Pin|motorRight1_Pin|motorLeft2_Pin|motorLeft1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(motor1_input_GPIO_Port, &GPIO_InitStruct);
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
@@ -242,14 +312,11 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
-	printf("ENTER");
 
   if (GPIO_Pin == motor1_input_Pin)
   {
 	  if(HAL_GPIO_ReadPin(motor1_input_GPIO_Port, motor1_input_Pin))
-		  count++;
-
-	  printf("%d\r\n", count);
+		  count1++;
   }
 
   if (count >= 500)

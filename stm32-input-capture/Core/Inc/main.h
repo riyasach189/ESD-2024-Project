@@ -64,10 +64,21 @@ void Error_Handler(void);
 #define motor1_input_Pin GPIO_PIN_6
 #define motor1_input_GPIO_Port GPIOA
 #define motor1_input_EXTI_IRQn EXTI4_15_IRQn
+#define motor2_input_Pin GPIO_PIN_7
+#define motor2_input_GPIO_Port GPIOA
+#define motor2_input_EXTI_IRQn EXTI4_15_IRQn
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
+#define motorRight2_Pin GPIO_PIN_2
+#define motorRight2_GPIO_Port GPIOD
+#define motorRight1_Pin GPIO_PIN_3
+#define motorRight1_GPIO_Port GPIOD
+#define motorLeft2_Pin GPIO_PIN_4
+#define motorLeft2_GPIO_Port GPIOD
+#define motorLeft1_Pin GPIO_PIN_5
+#define motorLeft1_GPIO_Port GPIOD
 
 /* USER CODE BEGIN Private defines */
 
