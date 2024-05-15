@@ -31,10 +31,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define WALL_DISTANCE 8 //cm
+#define WALL_DISTANCE 15 //cm
 
-#define PULSES_STRAIGHT 500
-#define PULSES_TURN 100
+#define PULSES_STRAIGHT 100
+#define PULSES_TURN 120
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -106,7 +106,7 @@ void stop(void)
 
 void forward(void)
 {
-	while (count1 < PULSES_STRAIGHT)
+	while (count1 <= PULSES_STRAIGHT)
 	{
 	  HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_RESET);
@@ -120,7 +120,7 @@ void forward(void)
 //to be corrected
 void left(void)
 {
-	while ((count1 < PULSES_TURN) && (count2 < PULSES_TURN))
+	while ((count1 <= PULSES_TURN) && (count2 <= PULSES_TURN))
 	{
 		HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_RESET);
@@ -134,7 +134,7 @@ void left(void)
 //to be corrected
 void right(void)
 {
-	while ((count1 < PULSES_TURN) && (count2 < PULSES_TURN))
+	while ((count1 <= PULSES_TURN) && (count2 <= PULSES_TURN))
 	{
 		HAL_GPIO_WritePin(motorLeft1_GPIO_Port, motorLeft1_Pin, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(motorLeft2_GPIO_Port, motorLeft2_Pin, GPIO_PIN_SET);
@@ -191,7 +191,7 @@ int main(void)
   HAL_GPIO_WritePin(trigStraight_GPIO_Port, trigStraight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
   HAL_GPIO_WritePin(trigRight_GPIO_Port, trigRight_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
 
-  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET); //led will blink every time motor completes 500 pulses
+//  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET); //led will blink every time motor completes 500 pulses
 
 //  HAL_TIM_Encoder_Start_IT(&htim3, TIM_CHANNEL_ALL); //timer 1 channel 1&2 encoder mode for motor A
 //  TIM3->CNT = 0;
@@ -593,7 +593,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 	  if(HAL_GPIO_ReadPin(Motor_Encoder_A_GPIO_Port, Motor_Encoder_A_Pin))
 		  count1++;
 
-	  printf("Count1: %d\r\n", count1);
+//	  printf("Count1: %d\r\n", count1);
   }
 
   if (GPIO_Pin == Motor_Encoder_B_Pin)
@@ -601,36 +601,36 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 	  if(HAL_GPIO_ReadPin(Motor_Encoder_B_GPIO_Port, Motor_Encoder_B_Pin))
 		  count2++;
 
-	  printf("Count2: %d\r\n", count2);
+//	  printf("Count2: %d\r\n", count2);
 	}
 
-  if (count1 >= PULSES_STRAIGHT)
-  {
-	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
-	  count1 = 0;
-	  stop();
-
-	  //delay
-	  for(int i=0; i<1000000; i++)
-	  {__NOP();}
-
-
-	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-  }
-
-  if (count2 >= PULSES_STRAIGHT)
-    {
-	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
-	  count2 = 0;
-	  stop();
-
-	  //delay
-	  for(int i =0; i<1000000; i++)
-	  {__NOP();}
-
-
-	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-    }
+//  if (count1 >= PULSES_STRAIGHT)
+//  {
+//	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+//	  count1 = 0;
+//	  stop();
+//
+//	  //delay
+//	  for(int i=0; i<1000000; i++)
+//	  {__NOP();}
+//
+//
+//	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+//  }
+//
+//  if (count2 >= PULSES_STRAIGHT)
+//    {
+//	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+//	  count2 = 0;
+//	  stop();
+//
+//	  //delay
+//	  for(int i =0; i<1000000; i++)
+//	  {__NOP();}
+//
+//
+//	  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+//    }
 }
 //void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 //{
