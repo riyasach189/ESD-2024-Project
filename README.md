@@ -3,7 +3,7 @@ The final code is stm32-lsr
 
 # Video Presentation
 
-[Video Presentation](ESD-2024-Project/ESD_Maze_Solver_Video.mp4)
+[Video Presentation](ESD-2024-Project\ESD_Maze_Solver_Video.mp4)
 
 
 # Contributors
